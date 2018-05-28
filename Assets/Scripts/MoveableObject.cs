@@ -10,28 +10,34 @@ public class MoveableObject : MonoBehaviour {
 
 	}
 
-
+	public float softSpeedCap;
+	public float speedCapFactor;
 	public float movementFactor = 10;
 
-	private Vector3 originPosition; 
+	[HideInInspector] private Vector3 originPosition; 
 
 	public float lerpFactor = 0.1f;
-	public bool bashSequence = false;
-	public float bashFrame = 0;
+	[HideInInspector] public int bashSequence = 0;
+	[HideInInspector] public float bashFrame = 0;
+	[HideInInspector] public float blinkFrame = 0;
+	public float blinkFrames = 5;
+	//[HideInInspector] public Vector3 testVec;
+
+	[HideInInspector] public Vector3 lastVelocity;
 
 
-	public Vector3 dashPoint = Vector3.negativeInfinity;
-	public Vector2 bashVector;
-	public Vector3 enemyPosition;
+	[HideInInspector] public Vector3 dashPoint = Vector3.negativeInfinity;
+	[HideInInspector] public Vector2 bashVector;
+	[HideInInspector] public Vector3 enemyPosition;
 
 
 	public Rigidbody2D objectsRigidbody;
-	public bool killV = false;
-	public bool mouseDown;
-	public Vector2 clickedInWorld = Vector2.zero;
+	[HideInInspector] public bool killV = false;
+	[HideInInspector] public bool mouseDown;
+	[HideInInspector] public Vector2 clickedInWorld = Vector2.zero;
 
 	public float velocityKillThreshold;
-	public float velocitySlowdown;
+	public float velocitySlowdown = 0.8f;
 
 
 
@@ -40,28 +46,52 @@ public class MoveableObject : MonoBehaviour {
 		if(Mathf.Abs(objectsRigidbody.velocity.x) <= velocityKillThreshold && Mathf.Abs(objectsRigidbody.velocity.y) <= velocityKillThreshold ){
 			objectsRigidbody.velocity = Vector2.zero;
 		} else {
-			objectsRigidbody.velocity = new Vector2((-1*objectsRigidbody.velocity.x)*velocitySlowdown, (-1*objectsRigidbody.velocity.y)*velocitySlowdown);
+			objectsRigidbody.velocity = new Vector2((objectsRigidbody.velocity.x)*velocitySlowdown, (objectsRigidbody.velocity.y)*velocitySlowdown);
+		}
+	}
+
+	public void speedCap(){
+		//objectsRigidbody.velocity = new Vector2()
+		if(objectsRigidbody.velocity.magnitude > softSpeedCap){
+			objectsRigidbody.velocity = new Vector2((objectsRigidbody.velocity.x)*speedCapFactor, (objectsRigidbody.velocity.y)*speedCapFactor);
 		}
 	}
 
 	public void bash(){
-		//TODO: Add maybe one or two intermediary frames of the player blinking to the enemies position
-		//It might be a bit too agressive right now. 
-		if(bashFrame == 0f){
-			originPosition = enemyPosition;
-			objectsRigidbody.transform.position = enemyPosition;
+
+
+		//Stage one is the blink to the enemy. Stage two is the dash away from them
+		//TODO: Make stage one take several frames
+		//TODO: Make stage two follow a log(x) curve
+		switch(bashSequence){
+
+		case 1:
+			originPosition = objectsRigidbody.transform.position;
+			if(++blinkFrame < blinkFrames){
+				objectsRigidbody.transform.position = Vector3.Lerp(originPosition, enemyPosition, blinkFrame/blinkFrames);
+			} else {
+				objectsRigidbody.transform.position = enemyPosition;
+				blinkFrame = 0;
+				bashSequence = 2;
+			}
+
+
+			break;
+
+		case 2:
+			bashFrame += lerpFactor;
+			objectsRigidbody.transform.position = Vector3.Lerp(originPosition, dashPoint, bashFrame);
+
+			if(bashFrame >= 1) {
+				lastVelocity = Vector3.Lerp(originPosition, dashPoint, bashFrame-lerpFactor) - Vector3.Lerp(originPosition, dashPoint, bashFrame-(lerpFactor*2));
+				//objectsRigidbody.AddForce(50 * bashVector * movementFactor);
+				objectsRigidbody.AddForce(50 * new Vector2(lastVelocity.x, lastVelocity.y), ForceMode2D.Impulse);
+				//print(objectsRigidbody.velocity.magnitude);
+				bashSequence = 0;
+			}	
+
+			break;
 		}
-
-
-		bashFrame += lerpFactor;
-		//TODO: Consider a different kind of interpolation for the dash so it more smoothly blends into the follow up movement
-		//objectsRigidbody.transform.position = Vector3.Lerp(objectsRigidbody.transform.position, dashPoint, bashFrame);
-		objectsRigidbody.transform.position = Vector3.Lerp(originPosition, dashPoint, bashFrame);
-
-		if(bashFrame >= 1) {
-			objectsRigidbody.AddForce(50 * bashVector * movementFactor);
-			bashSequence = false;
-		}	
 	}
 
 

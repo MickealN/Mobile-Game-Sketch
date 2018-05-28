@@ -463,19 +463,30 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 1423688254789664, guid: 30984c53c9dc3c14cb3afcfae97d63ba, type: 2}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 114666888550777824, guid: 30984c53c9dc3c14cb3afcfae97d63ba,
         type: 2}
       propertyPath: lerpFactor
-      value: 0.05
+      value: 0.25
       objectReference: {fileID: 0}
-    - target: {fileID: 108355016414529638, guid: 30984c53c9dc3c14cb3afcfae97d63ba,
+    - target: {fileID: 114666888550777824, guid: 30984c53c9dc3c14cb3afcfae97d63ba,
         type: 2}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: velocitySlowdown
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114666888550777824, guid: 30984c53c9dc3c14cb3afcfae97d63ba,
+        type: 2}
+      propertyPath: softSpeedCap
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114666888550777824, guid: 30984c53c9dc3c14cb3afcfae97d63ba,
+        type: 2}
+      propertyPath: speedCapFactor
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114666888550777824, guid: 30984c53c9dc3c14cb3afcfae97d63ba,
+        type: 2}
+      propertyPath: blinkFrames
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 30984c53c9dc3c14cb3afcfae97d63ba, type: 2}
@@ -519,20 +530,15 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 108089283445475792, guid: 4a7fb3409572c9844883281b8773552d,
+    - target: {fileID: 114582888996809016, guid: 4a7fb3409572c9844883281b8773552d,
         type: 2}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: dashRange
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114582888996809016, guid: 4a7fb3409572c9844883281b8773552d,
         type: 2}
-      propertyPath: movementFactor
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 50162601133956630, guid: 4a7fb3409572c9844883281b8773552d,
-        type: 2}
-      propertyPath: m_Constraints
-      value: 4
+      propertyPath: lerpFactor
+      value: 0.15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4a7fb3409572c9844883281b8773552d, type: 2}

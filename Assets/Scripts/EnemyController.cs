@@ -55,7 +55,7 @@ public class EnemyController : MoveableObject {
 			rotateArrow();
 		}
 
-		if(bashSequence){
+		if(bashSequence != 0){
 			bash();
 		}
 	}
@@ -147,7 +147,7 @@ public class EnemyController : MoveableObject {
 		
 
 		//TODO: Verify this is okay later on
-		Invoke("reenableCollision", 3);
+		Invoke("reenableCollision", 1);
 	}
 		
 

@@ -18,11 +18,12 @@ public class PlayerController : MoveableObject {
 
 	void Update () {
 
+		speedCap();
 		if(killV){
 			killVelocity();
 		}
 
-		if(bashSequence){
+		if(bashSequence != 0){
 			bash();
 		}
 	}
@@ -62,7 +63,7 @@ public class PlayerController : MoveableObject {
 		bashVector = direction;
 		killV = false;
 		bashFrame = 0f;
-		bashSequence = true;
+		bashSequence = 1;
 	}
 		
 

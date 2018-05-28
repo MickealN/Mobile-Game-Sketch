@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114666888550777824}
   m_Layer: 0
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -240,9 +240,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementFactor: 1
+  lerpFactor: 0.1
+  bashSequence: 0
+  bashFrame: 0
+  dashPoint: {x: -Infinity, y: -Infinity, z: -Infinity}
+  bashVector: {x: 0, y: 0}
+  enemyPosition: {x: 0, y: 0, z: 0}
+  objectsRigidbody: {fileID: 0}
+  killV: 0
+  mouseDown: 0
+  clickedInWorld: {x: 0, y: 0}
   velocityKillThreshold: 0.01
   velocitySlowdown: 0.1
-  mouseDown: 0
 --- !u!114 &114683288825322394
 MonoBehaviour:
   m_ObjectHideFlags: 1

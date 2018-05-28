@@ -69,7 +69,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1451140104230202}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.95, y: -0.83, z: 0}
+  m_LocalPosition: {x: -2.78, y: -1.31, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4943551644414152}
@@ -122,7 +122,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &61440688510166738
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -195,6 +195,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2796e9e7834a3684ab560fbd5bc1590e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementFactor: 1
+  lerpFactor: 0.1
+  bashSequence: 0
+  bashFrame: 0
+  dashPoint: {x: -Infinity, y: -Infinity, z: -Infinity}
+  bashVector: {x: 0, y: 0}
+  enemyPosition: {x: 0, y: 0, z: 0}
+  objectsRigidbody: {fileID: 0}
+  killV: 0
+  mouseDown: 0
+  clickedInWorld: {x: 0, y: 0}
   velocityKillThreshold: 0.01
   velocitySlowdown: 0.1
   arrow: {fileID: 212984273907609700}
@@ -202,6 +213,7 @@ MonoBehaviour:
   enemyType: 0
   playerReference: {fileID: 0}
   bashThreshhold: 5
+  dashRange: 2
 --- !u!212 &212294250309679346
 SpriteRenderer:
   m_ObjectHideFlags: 1

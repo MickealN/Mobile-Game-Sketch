@@ -195,10 +195,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2796e9e7834a3684ab560fbd5bc1590e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 0, g: 0, b: 0, a: 0}
+  softSpeedCap: 0
+  speedCapFactor: 0
   movementFactor: 1
+  blinkFrames: 5
   lerpFactor: 0.1
+  originPosition: {x: 0, y: 0, z: 0}
   bashSequence: 0
   bashFrame: 0
+  blinkFrame: 0
+  lastVelocity: {x: 0, y: 0, z: 0}
   dashPoint: {x: -Infinity, y: -Infinity, z: -Infinity}
   bashVector: {x: 0, y: 0}
   enemyPosition: {x: 0, y: 0, z: 0}
@@ -208,6 +215,7 @@ MonoBehaviour:
   clickedInWorld: {x: 0, y: 0}
   velocityKillThreshold: 0.01
   velocitySlowdown: 0.1
+  auraLight: {fileID: 0}
   arrow: {fileID: 212984273907609700}
   timeToExist: 1
   enemyType: 0

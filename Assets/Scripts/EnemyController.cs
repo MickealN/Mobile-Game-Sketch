@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.Experimental.U2D;
+using System.Runtime.ConstrainedExecution;
 
 public class EnemyController : MoveableObject {
 
@@ -29,9 +30,14 @@ public class EnemyController : MoveableObject {
 
 
 
+
+
 	void Start () {
 		objectsRigidbody = gameObject.GetComponent<Rigidbody2D>();
 		playerReference = GameObject.FindGameObjectWithTag("Player");
+		auraLight = gameObject.GetComponentInChildren<Light>();
+		auraLight.color = color;
+
 		if(enemyType == EnemyType.emitted){
 			//TODO: dont' self destroy if player is clicking
 			Destroy(gameObject, timeToExist);
@@ -58,15 +64,14 @@ public class EnemyController : MoveableObject {
 		if(bashSequence != 0){
 			bash();
 		}
+
 	}
 
 
 
 
 	private void OnMouseDown(){
-		//print("clicked enemy");
 		if(Vector2.Distance(gameObject.transform.position, playerReference.transform.position) < bashThreshhold){
-			bashLegallyStarted = true;
 			startBash();
 		}
 	}
@@ -75,13 +80,11 @@ public class EnemyController : MoveableObject {
 	private void OnMouseUp(){
 		mouseDown = false;
 		if(bashLegallyStarted){
-			bashLegallyStarted = false;
 			completeBash();
 		}
-
-
 	}
 
+	//No touching it works
 	void rotateArrow(){
 		angleVector = new Vector3(clickedInWorld.x, clickedInWorld.y, 0) - gameObject.transform.position;
 		arrowAngle = (float) 90f + Mathf.Rad2Deg * Mathf.Atan2(angleVector.y, angleVector.x);
@@ -91,14 +94,22 @@ public class EnemyController : MoveableObject {
 	}
 
 
-
+	/*
+	 * Check Colors, if invalid combination, cancel the bash with a differnt codeblock
+	 * Flag the bash as legal (so mouse up doesn't call second half)
+	 * Take a backup of the velocity to the magnitude can be restored on redirect
+	 * Kill the players velocity
+	 * Kill the enemies velocity
+	 * Set mousedown to true so the arrow updates its rotation in realtime
+	 * Disable collisions so the player can bash through without issue
+	 */
 	private void startBash(){
-		//Stop the players motion
-		//Stop the projectiles motion
-		//Disable collisions while moving through the enemy
-		//Draw Arrow dynamically over the mouse
-			//Set Mousedown to true
-			//Create Arrow object childed to enemy
+		if(playerReference.GetComponent<PlayerController>().getColor() != getColor()){
+			//Do extra cannot bash animation stuffs here
+			return;
+		}
+			
+		bashLegallyStarted = true;
 		velocityBackup = objectsRigidbody.velocity;
 		playerReference.SendMessage("killVelocityHack");
 		killV = true;
@@ -107,8 +118,15 @@ public class EnemyController : MoveableObject {
 		Physics2D.IgnoreCollision(playerReference.GetComponent<BoxCollider2D>(), gameObject.GetComponent<BoxCollider2D>(), true);
 	}
 
-	private void completeBash(){
+	/*
+	 * Reset bash flag
+	 * Disable the arrow
+	 * Allow the objects to move (shut off killV)
+	 * Normallize the directions magnitude to be fractions of 1
+	 */ 
 
+	private void completeBash(){
+		bashLegallyStarted = false;
 		arrow.enabled = false;
 		killV = false;
 
@@ -156,8 +174,11 @@ public class EnemyController : MoveableObject {
 		Physics2D.IgnoreCollision(playerReference.GetComponent<BoxCollider2D>(), gameObject.GetComponent<BoxCollider2D>(), false);
 	}
 
+
+	//Used by the emitter to setup the enemy
 	public void setEnemyProperties(EnemyType t, float time){
 		enemyType = t;
 		timeToExist = time;
 	}
+
 }

@@ -4,24 +4,20 @@ using UnityEngine;
 using System;
 
 public class MoveableObject : MonoBehaviour {
-
-	public void printSomething(){
-		print("test");
-
-	}
-
+	
+	public Color color;
 	public float softSpeedCap;
 	public float speedCapFactor;
 	public float movementFactor = 10;
-
-	[HideInInspector] private Vector3 originPosition; 
-
+	public float blinkFrames = 5;
 	public float lerpFactor = 0.1f;
+
+
+	[HideInInspector] public Vector3 originPosition; 
 	[HideInInspector] public int bashSequence = 0;
 	[HideInInspector] public float bashFrame = 0;
 	[HideInInspector] public float blinkFrame = 0;
-	public float blinkFrames = 5;
-	//[HideInInspector] public Vector3 testVec;
+
 
 	[HideInInspector] public Vector3 lastVelocity;
 
@@ -38,6 +34,8 @@ public class MoveableObject : MonoBehaviour {
 
 	public float velocityKillThreshold;
 	public float velocitySlowdown = 0.8f;
+
+	[HideInInspector] public Light auraLight;
 
 
 
@@ -57,11 +55,10 @@ public class MoveableObject : MonoBehaviour {
 		}
 	}
 
+
 	public void bash(){
 
-
 		//Stage one is the blink to the enemy. Stage two is the dash away from them
-		//TODO: Make stage one take several frames
 		//TODO: Make stage two follow a log(x) curve
 		switch(bashSequence){
 
@@ -74,23 +71,31 @@ public class MoveableObject : MonoBehaviour {
 				blinkFrame = 0;
 				bashSequence = 2;
 			}
-
-
 			break;
 
 		case 2:
 			bashFrame += lerpFactor;
-			objectsRigidbody.transform.position = Vector3.Lerp(originPosition, dashPoint, bashFrame);
 
-			if(bashFrame >= 1) {
-				lastVelocity = Vector3.Lerp(originPosition, dashPoint, bashFrame-lerpFactor) - Vector3.Lerp(originPosition, dashPoint, bashFrame-(lerpFactor*2));
+
+
+			objectsRigidbody.transform.position = Vector3.Lerp(enemyPosition, dashPoint, bashFrame);
+
+			if(bashFrame >= 1){
+				
+				lastVelocity = Vector3.Lerp(enemyPosition, dashPoint, bashFrame-lerpFactor) - Vector3.Lerp(enemyPosition, dashPoint, bashFrame-(lerpFactor*2));
+
 				//objectsRigidbody.AddForce(50 * bashVector * movementFactor);
 				objectsRigidbody.AddForce(50 * new Vector2(lastVelocity.x, lastVelocity.y), ForceMode2D.Impulse);
 				//print(objectsRigidbody.velocity.magnitude);
 				bashSequence = 0;
-			}	
+			}
+			break;
+		case 3:
+			//For a potential solo dash later. 
+
 
 			break;
+
 		}
 	}
 
@@ -117,4 +122,17 @@ public class MoveableObject : MonoBehaviour {
 
 		return new Vector3(xOnC, yOnC, 0);
 	}
+		
+
+	public void setColor(Color c){
+		color = c;
+	}
+	public void setLight(Color c){
+		auraLight.color = c;
+	}
+	public Color getColor(){
+		return color; //auraLight.color;
+	}
+
+
 }
